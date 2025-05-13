@@ -1,0 +1,67 @@
+site_name:  CTF Writeups
+site_url: https://tryptoph.github.io/CTF-Writeups
+site_author: Your Name
+site_description: Personal collection of security notes, CTF writeups, and hacking techniques
+
+# Add plugins section here
+plugins:
+  - search
+  - roamlinks
+  - tags
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.tabs.link
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - footnotes
+
+nav:
+  - Home: index.md
+  - Web Challenges:
+      - Overview: web/index.md
+      - PDFy: web/pdfy.md
+  - Binary Exploitation:
+      - Overview: pwn/index.md
+  - Reverse Engineering:
+      - Overview: reverse/index.md
+  - Cryptography:
+      - Overview: crypto/index.md
+  - Misc:
+      - Overview: misc/index.md
+  - Boxes:
+      - Overview: boxes/index.md
