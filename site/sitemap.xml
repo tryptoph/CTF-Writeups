@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/boxes/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/crypto/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/misc/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/pwn/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/reverse/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/web/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+    <url>
+         <loc>https://tryptoph.github.io/CTF-Writeups/web/pdfy/</loc>
+         <lastmod>2025-05-14</lastmod>
+    </url>
+</urlset>

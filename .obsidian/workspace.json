@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/pwn/index.md",
+                "file": "docs/index.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/pwn/index.md",
+                "file": "docs/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/pwn/index.md",
+                "file": "docs/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/pwn/index.md"
+                "file": "docs/index.md"
               }
             }
           }
@@ -148,16 +148,33 @@
   },
   "active": "94625aa98a4a085c",
   "lastOpenFiles": [
-    "docs/boxes/index.md",
-    "docs/boxes",
-    "docs/reverse/index.md",
+    "site/search/search_index.json",
+    "site/search",
+    "site/web/pdfy/index.html",
+    "site/web/pdfy",
+    "site/web/index.html",
+    "site/web",
+    "site/reverse/index.html",
+    "site/reverse",
+    "site/pwn/index.html",
+    "site/pwn",
+    "site/misc/index.html",
+    "site/assets/images/favicon.png",
+    "site/assets/images/Pasted image 20250513201949.png",
+    "site/assets/images/Pasted image 20250513182039.png",
+    "site/assets/images/Pasted image 20250513182017.png",
+    "site/assets/images/Pasted image 20250513181949.png",
+    "site/assets/images/Pasted image 20250513181906.png",
+    "site/assets/images/Pasted image 20250513181651.png",
+    "site/assets/images/Pasted image 20250513181413.png",
+    "site/assets/images/Pasted image 20250513181319.png",
+    "site/assets/images/Pasted image 20250513181156.png",
     "docs/pwn/index.md",
+    "docs/boxes/index.md",
+    "docs/reverse/index.md",
     "docs/misc/index.md",
     "docs/web/pdfy.md",
     "docs/web/index.md",
-    "docs/index.md",
-    "docs/assets/images/Pasted image 20250513201949.png",
-    "docs/assets/images/Pasted image 20250513180930.png",
-    "docs/assets/images/Pasted image 20250513180806.png"
+    "docs/index.md"
   ]
 }
